@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Moonthly</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" type="image/x-icon" href="assets/Icon.png">
+  </head>
+  <body>
+    <div id="calendarSection"> <!-- Calendar section -->
+      <div id="calendarHeader"> <!-- Month + navigation -->
+        <img id="animated" src="assets/Moon1.png" width="50px" height="50px"> <!-- Animated image -->
+        <h2 id="monthLabel" style="font-size: 36px;"></h2>
+        <button id="prevMonth">←</button>
+        <button id="nextMonth">→</button>
+      </div>
+      <div class="weekdays"> <!-- Weekday labels -->
+        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+      </div>
+      <div id="calendar"></div> <!-- Calendar grid -->
+    </div>
+    <div id="jumpTo"> <!-- Jump to date -->
+      <select id="monthSelect" style="font-size: 16px;"></select>
+      <input type="number" id="yearInput" min="2000" max="2100" style="font-size: 16px;">
+      <button id="goToDate" style="font-size: 16px;">Go</button>
+    </div>
+    <div id="noteModal"> <!-- Modal for writing notes -->
+      <h2 id="modalDate" style="margin: 0px;"></h2>
+      <textarea id="noteText" rows="4" placeholder="Add a new event"></textarea><br>
+      <button id="saveNote">Save</button>
+      <button id="deleteNote">Delete</button>
+      <button id="closeModal">Close</button>
+    </div>
+    <button id="todo-toggle">To Do List</button> <!-- Toggle button -->
+    <div id="todo-container"> <!-- To do list panel -->
+      <h3 id="listLabel">To Do List</h3>
+      <ul id="todo-list"></ul>
+      <div id="todo-input-row">
+        <input type="text" id="todo-input" placeholder="Add a new task">
+        <button id="add-todo">Add</button>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
