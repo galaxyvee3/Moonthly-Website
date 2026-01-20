@@ -56,7 +56,7 @@ logoutBtn.addEventListener("click", async () => {
 // Auth state change
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    status.textContent = "Logged in as " + user.email;
+    status.textContent = "Logged in: " + user.email;
     logoutBtn.hidden = false;
     // Load users notes and todos from Firestore
     try {

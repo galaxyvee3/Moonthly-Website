@@ -90,13 +90,27 @@ body {
 }
 #email,
 #password {
+  width: 10rem;
+  font-size: 16px;
   cursor: text;
 }
+#loginBtn,
+#signupBtn,
+#logoutBtn {
+  width: 4rem;
+  font-size: 16px;
+}
+#email:hover,
+#password:hover,
+#loginBtn:hover,
+#signupBtn:hover,
+#logoutBtn:hover,
 #calendarHeader button:hover,
 #saveNote:hover,
 #deleteNote:hover,
 #closeModal:hover,
-#jumpTo button:hover {
+#jumpTo button:hover,
+#todo-input:hover {
   background: #44475a;
 }
 .weekdays {
@@ -169,6 +183,9 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 5px #888;
 }
+#todo-toggle:hover {
+  background: #888;
+}
 /* To-Do Panel */
 #todo-container {
   position: fixed;
@@ -214,6 +231,9 @@ body {
 #add-todo {
   background-color: #F0E68C;
   white-space: nowrap;
+}
+#add-todo:hover {
+  background-color: #888;
 }
 #listLabel {
   text-align: center;
