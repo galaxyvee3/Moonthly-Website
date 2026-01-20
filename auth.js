@@ -10,16 +10,49 @@ const email = document.getElementById("email");
 const password = document.getElementById("password");
 const status = document.getElementById("authStatus");
 const logoutBtn = document.getElementById("logoutBtn");
+const loginBtn = document.getElementById("loginBtn");
+const signupBtn = document.getElementById("signupBtn");
 
-loginBtn.onclick = () =>
-  signInWithEmailAndPassword(auth, email.value, password.value);
+// Login button
+loginBtn.onclick = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, email.value, password.value);
+    status.textContent = "Logged in!";
+  } catch (err) {
+    status.textContent = err.message;
+    console.error(err);
+  }
+};
 
-signupBtn.onclick = () =>
-  createUserWithEmailAndPassword(auth, email.value, password.value);
+// Signup button
+signupBtn.onclick = async () => {
+  try {
+    await createUserWithEmailAndPassword(auth, email.value, password.value);
+    status.textContent = "Account created!";
+  } catch (err) {
+    status.textContent = err.message;
+    console.error(err);
+  }
+};
 
-logoutBtn.onclick = () => signOut(auth);
+// Logout button
+logoutBtn.onclick = async () => {
+  try {
+    await signOut(auth);
+    status.textContent = "Logged out!";
+  } catch (err) {
+    status.textContent = err.message;
+    console.error(err);
+  }
+};
 
-// expose auth state globally
-window.onAuthStateChanged = onAuthStateChanged;
-window.authStatus = status;
-window.logoutBtn = logoutBtn;
+// Show login state
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    status.textContent = `Logged in as ${user.email}`;
+    logoutBtn.hidden = false;
+  } else {
+    status.textContent = "Offline / not logged in";
+    logoutBtn.hidden = true;
+  }
+});
