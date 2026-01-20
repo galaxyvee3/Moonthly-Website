@@ -186,6 +186,8 @@ onAuthStateChanged(auth, async (user) => {
   try { // LOGGED IN
     const snap = await getDoc(doc(db, "users", user.uid));
     if (snap.exists()) {
+      document.getElementById('email').value = "";
+      document.getElementById('password').value = "";
       const data = snap.data();
       notes = data.calendarNotes || {};
       localStorage.setItem("calendarNotes", JSON.stringify(notes));

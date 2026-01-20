@@ -46,7 +46,7 @@ logoutBtn.addEventListener("click", async () => {
   } catch (err) {
     console.error(err);
   }
-  status.textContent = "Offline";
+  status.textContent = "Logged out";
   logoutBtn.hidden = true;
   // Clear calendar
   buildCalendar(currentYear, currentMonth);
@@ -58,10 +58,11 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     status.textContent = "Logged in: " + user.email;
     logoutBtn.hidden = false;
-    // Load users notes and todos from Firestore
-    try {
+    try { // Load users notes and todos from Firestore
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
+        document.getElementById('email').value = "";
+        document.getElementById('password').value = "";
         const data = snap.data();
         if (data.calendarNotes) {
           Object.assign(notes, data.calendarNotes); // update the exported notes object
@@ -78,7 +79,7 @@ onAuthStateChanged(auth, async (user) => {
     // Refresh calendar with notes
     buildCalendar(currentYear, currentMonth);
   } else { // Not logged in
-    status.textContent = "Offline";
+    status.textContent = "Logged out";
     logoutBtn.hidden = true;
     // Clear calendar
     buildCalendar(currentYear, currentMonth);
