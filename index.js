@@ -44,16 +44,13 @@ export function buildCalendar(year, month) {
   monthLabel.textContent = `${monthNames[month]} ${year}`;
   monthSelect.value = month;
   yearInput.value = year;
-
   for (let i = 0; i < firstDay; i++) calendar.appendChild(document.createElement('div'));
-
   for (let d = 1; d <= daysInMonth; d++) {
     const cell = document.createElement('div');
     cell.classList.add('day');
     const dayNum = document.createElement('div'); dayNum.textContent = d; dayNum.style.fontWeight="bold";
     const notePreview = document.createElement('div');
     const dateKey = `${year}-${month+1}-${d}`;
-
     if(notes[dateKey]){
       const ul = document.createElement("ul"); ul.classList.add("note-preview");
       notes[dateKey].split("\n").filter(l=>l.trim()!=="").forEach(line=>{
@@ -61,50 +58,47 @@ export function buildCalendar(year, month) {
       });
       notePreview.appendChild(ul);
     }
-
     cell.appendChild(dayNum);
     cell.appendChild(notePreview);
-
     cell.addEventListener('click', () => {
       selectedDate = dateKey;
       modalDate.innerText = `Notes for ${selectedDate}`;
       noteText.value = notes[selectedDate] || "";
       modal.style.display = 'block';
     });
-
     calendar.appendChild(cell);
   }
 }
 
 // --- Save and delete notes ---
-noteText.addEventListener('input', async () => {
+document.getElementById('saveNote').addEventListener('click', async () => {
   if (!selectedDate) return;
   notes[selectedDate] = noteText.value;
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
-
-  if(auth.currentUser){
+  buildCalendar(currentYear, currentMonth);
+  if (auth.currentUser) {
     try {
-      await setDoc(doc(db,"users",auth.currentUser.uid), {calendarNotes: notes}, {merge:true});
-    } catch(e){ console.error(e); }
+      await setDoc(doc(db, "users", auth.currentUser.uid), { calendarNotes: notes }, { merge: true });
+    } catch (err) {
+      console.error("Error syncing notes to Firestore:", err);
+    }
   }
-});
-
-document.getElementById('saveNote').addEventListener('click', () => {
-  modal.style.display='none';
+  modal.style.display = 'none';
 });
 
 document.getElementById('deleteNote').addEventListener('click', async () => {
   if (!selectedDate) return;
   delete notes[selectedDate];
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
-
-  if(auth.currentUser){
-    try { await setDoc(doc(db,"users",auth.currentUser.uid), {calendarNotes: notes}, {merge:true}); }
-    catch(e){ console.error(e); }
+  buildCalendar(currentYear, currentMonth);
+  if (auth.currentUser) {
+    try {
+      await setDoc(doc(db, "users", auth.currentUser.uid), { calendarNotes: notes }, { merge: true });
+    } catch (err) {
+      console.error("Error syncing note deletion:", err);
+    }
   }
-
-  buildCalendar(currentYear,currentMonth);
-  modal.style.display='none';
+  modal.style.display = 'none';
 });
 
 document.getElementById('closeModal').addEventListener('click', ()=>{ modal.style.display='none'; });

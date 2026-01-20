@@ -1,46 +1,83 @@
 // auth.js
 import { auth, db } from "./firebase.js";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { notes, buildCalendar, currentYear, currentMonth, loadTodos } from "./index.js";
 
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const status = document.getElementById("authStatus");
-const logoutBtn = document.getElementById("logoutBtn");
+// --- Elements ---
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 const loginBtn = document.getElementById("loginBtn");
 const signupBtn = document.getElementById("signupBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const status = document.getElementById("authStatus");
 
-loginBtn.onclick = () => signInWithEmailAndPassword(auth,email.value,password.value)
-  .catch(err=>status.textContent=err.message);
-signupBtn.onclick = () => createUserWithEmailAndPassword(auth,email.value,password.value)
-  .catch(err=>status.textContent=err.message);
-logoutBtn.onclick = () => signOut(auth);
-
-// Load Firestore notes/todos
-async function loadFromCloud(user){
-  const snap = await getDoc(doc(db,"users",user.uid));
-  if(snap.exists()){
-    const data = snap.data();
-    if(data.calendarNotes){ Object.assign(notes,data.calendarNotes); localStorage.setItem("calendarNotes",JSON.stringify(notes)); }
-    if(data.todoList){ localStorage.setItem("todoList",JSON.stringify(data.todoList)); loadTodos(); }
+// --- Login ---
+loginBtn.addEventListener("click", async () => {
+  try {
+    await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+  } catch (err) {
+    console.error(err);
+    status.textContent = "Login failed: " + err.message;
   }
-  buildCalendar(currentYear,currentMonth);
-}
+});
 
-// Listen for login state
-onAuthStateChanged(auth, async (user)=>{
-  if(user){
-    status.textContent=`Logged in as ${user.email}`;
-    logoutBtn.hidden=false;
-    await loadFromCloud(user);
+// --- Signup ---
+signupBtn.addEventListener("click", async () => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+    // Create empty Firestore document for new user
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      calendarNotes: {},
+      todoList: [],
+      updatedAt: Date.now()
+    });
+  } catch (err) {
+    console.error(err);
+    status.textContent = "Sign up failed: " + err.message;
+  }
+});
+
+// --- Logout ---
+logoutBtn.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    status.textContent = "Logged out";
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+// --- Auth state change ---
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    status.textContent = "Logged in as " + user.email;
+    logoutBtn.hidden = false;
+    // Load user's notes & todos from Firestore
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.calendarNotes) {
+          Object.assign(notes, data.calendarNotes); // update the exported notes object
+          localStorage.setItem("calendarNotes", JSON.stringify(notes));
+        }
+        if (data.todoList) {
+          localStorage.setItem("todoList", JSON.stringify(data.todoList));
+          loadTodos();
+        }
+      }
+    } catch (err) {
+      console.error("Error loading user data:", err);
+    }
+    // Refresh calendar with notes
+    buildCalendar(currentYear, currentMonth);
   } else {
-    status.textContent="Offline / not logged in";
-    logoutBtn.hidden=true;
-    for(const k in notes) delete notes[k];
-    localStorage.removeItem("calendarNotes");
-    localStorage.removeItem("todoList");
-    buildCalendar(currentYear,currentMonth);
+    // Not logged in
+    status.textContent = "Offline";
+    logoutBtn.hidden = true;
+    // Optionally clear notes/todos from calendar view
+    buildCalendar(currentYear, currentMonth);
     loadTodos();
   }
 });
