@@ -262,3 +262,6 @@ setInterval(() => { // switch to next image
   index = (index + 1) % images.length;
   img.src = images[index];
 }, 500); // switch image every 500ms
+
+// Export everything needed for auth.js
+export { buildCalendar, loadTodos, notes, currentYear, currentMonth };
