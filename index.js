@@ -1,7 +1,7 @@
 import { auth, db } from "./firebase.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+// Save new user notes to cloud
 async function syncNotesToCloud() {
   if (!auth.currentUser) return;
   await setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -10,7 +10,7 @@ async function syncNotesToCloud() {
     updatedAt: Date.now()
   });
 }
-
+// Load user notes from cloud
 async function loadFromCloud() {
   if (!auth.currentUser) return;
   const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
@@ -26,7 +26,7 @@ async function loadFromCloud() {
   }
   buildCalendar(currentYear, currentMonth);
 }
-
+// User logged into their account
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     authStatus.textContent = "Logged in";
@@ -50,8 +50,8 @@ const monthSelect = document.getElementById('monthSelect');
 const yearInput = document.getElementById('yearInput');
 const goToDateBtn = document.getElementById('goToDate');
 let selectedDate = null;
-// Load notes from localStorage if they exist
-let notes = JSON.parse(localStorage.getItem('calendarNotes')) || {};
+// Initial notes are empty
+let notes = {};
 // Track current view
 let currentYear = new Date().getFullYear();
 let currentMonth = new Date().getMonth();
@@ -114,6 +114,12 @@ function buildCalendar(year, month) {
 }
 // Save note
 document.getElementById('saveNote').addEventListener('click', () => {
+  // Dont save if user is not logged in 
+  if (!auth.currentUser) {
+    alert("Please log in to save notes.");
+    modal.style.display = 'none';
+    return;
+  }
   if (selectedDate) {
     notes[selectedDate] = noteText.value;
     // Save to localStorage
