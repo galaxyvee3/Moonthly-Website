@@ -2,13 +2,13 @@
 import { auth, db } from "./firebase.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// --- Global state ---
+// Global state
 export let notes = {}; // empty before login
 export let currentYear = new Date().getFullYear();
 export let currentMonth = new Date().getMonth();
 let selectedDate = null;
 
-// --- Elements ---
+// Elements
 const calendar = document.getElementById('calendar');
 const modal = document.getElementById('noteModal');
 const modalDate = document.getElementById('modalDate');
@@ -36,7 +36,7 @@ monthNames.forEach((m, i) => {
   monthSelect.appendChild(opt);
 });
 
-// --- Build calendar ---
+// Build calendar
 export function buildCalendar(year, month) {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -51,11 +51,20 @@ export function buildCalendar(year, month) {
     const dayNum = document.createElement('div'); dayNum.textContent = d; dayNum.style.fontWeight="bold";
     const notePreview = document.createElement('div');
     const dateKey = `${year}-${month+1}-${d}`;
-    if(notes[dateKey]){
-      const ul = document.createElement("ul"); ul.classList.add("note-preview");
-      notes[dateKey].split("\n").filter(l=>l.trim()!=="").forEach(line=>{
-        const li = document.createElement("li"); li.textContent=line; ul.appendChild(li);
-      });
+    if (
+      typeof notes[dateKey] === "string" &&
+      notes[dateKey].trim().length > 0
+    ) {
+      const ul = document.createElement("ul");
+      ul.classList.add("note-preview");
+      notes[dateKey]
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .forEach(line => {
+          const li = document.createElement("li");
+          li.textContent = line;
+          ul.appendChild(li);
+        });
       notePreview.appendChild(ul);
     }
     cell.appendChild(dayNum);
@@ -70,7 +79,7 @@ export function buildCalendar(year, month) {
   }
 }
 
-// --- Save and delete notes ---
+// Save and delete notes
 document.getElementById('saveNote').addEventListener('click', async () => {
   if (!selectedDate) return;
   const text = noteText.value.trim();
@@ -108,7 +117,7 @@ document.getElementById('deleteNote').addEventListener('click', async () => {
 
 document.getElementById('closeModal').addEventListener('click', ()=>{ modal.style.display='none'; });
 
-// --- Calendar navigation ---
+// Calendar navigation
 prevMonthBtn.addEventListener('click', () => {
   currentMonth--; if(currentMonth<0){currentMonth=11; currentYear--;}
   buildCalendar(currentYear,currentMonth);
@@ -122,7 +131,7 @@ goToDateBtn.addEventListener('click', () => {
   if(!isNaN(m) && !isNaN(y)){ currentMonth=m; currentYear=y; buildCalendar(currentYear,currentMonth);}
 });
 
-// --- To-do functions ---
+// To-do functions
 function addTask(text, done=false){
   const li = document.createElement('li');
   const cb = document.createElement('input'); cb.type="checkbox"; cb.checked=done;
@@ -134,12 +143,9 @@ function addTask(text, done=false){
 
 addButton.addEventListener('click', ()=>{ if(input.value.trim()!==""){ addTask(input.value); input.value=""; }});
 input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addButton.click(); });
+toggleButton.addEventListener('click', ()=>{ todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex'; });
 
-toggleButton.addEventListener('click', ()=>{ 
-  todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex';
-});
-
-// --- Save & load todos ---
+// Save and load todos
 export function saveTodos(){
   const todos = Array.from(list.querySelectorAll('li')).map(li=>{
     return {text: li.childNodes[1].textContent.trim(), done: li.childNodes[0].checked};
@@ -156,7 +162,7 @@ export function loadTodos(){
   list.innerHTML=""; todos.forEach(t=>addTask(t.text,t.done));
 }
 
-// --- Animated image ---
+// Animated image
 const img = document.getElementById("animated");
 const images = ["assets/Moon1.png","assets/Moon2.png","assets/Moon5.png","assets/Moon6.png",
 "assets/Moon9.png","assets/Moon10.png","assets/Moon5.png","assets/Moon6.png","assets/Moon3.png",
@@ -164,7 +170,7 @@ const images = ["assets/Moon1.png","assets/Moon2.png","assets/Moon5.png","assets
 "assets/Moon7.png","assets/Moon8.png"];
 let index=0; setInterval(()=>{ index=(index+1)%images.length; img.src=images[index]; },500);
 
-// --- Load initial state ---
+// Load initial state
 notes = JSON.parse(localStorage.getItem('calendarNotes')) || {};
 buildCalendar(currentYear,currentMonth);
 loadTodos();

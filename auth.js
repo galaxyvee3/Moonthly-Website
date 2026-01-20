@@ -4,7 +4,7 @@ import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndP
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { notes, buildCalendar, currentYear, currentMonth, loadTodos } from "./index.js";
 
-// --- Elements ---
+// Elements
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const loginBtn = document.getElementById("loginBtn");
@@ -12,7 +12,7 @@ const signupBtn = document.getElementById("signupBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const status = document.getElementById("authStatus");
 
-// --- Login ---
+// Login
 loginBtn.addEventListener("click", async () => {
   try {
     await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
@@ -22,7 +22,7 @@ loginBtn.addEventListener("click", async () => {
   }
 });
 
-// --- Signup ---
+// Signup
 signupBtn.addEventListener("click", async () => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
@@ -38,7 +38,7 @@ signupBtn.addEventListener("click", async () => {
   }
 });
 
-// --- Logout ---
+// Logout
 logoutBtn.addEventListener("click", async () => {
   try {
     await signOut(auth);
@@ -48,12 +48,12 @@ logoutBtn.addEventListener("click", async () => {
   }
 });
 
-// --- Auth state change ---
+// Auth state change
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     status.textContent = "Logged in as " + user.email;
     logoutBtn.hidden = false;
-    // Load user's notes & todos from Firestore
+    // Load users notes and todos from Firestore
     try {
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
@@ -76,7 +76,7 @@ onAuthStateChanged(auth, async (user) => {
     // Not logged in
     status.textContent = "Offline";
     logoutBtn.hidden = true;
-    // Optionally clear notes/todos from calendar view
+    // Clear notes/todos from calendar view
     buildCalendar(currentYear, currentMonth);
     loadTodos();
   }
