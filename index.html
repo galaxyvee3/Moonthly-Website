@@ -7,6 +7,14 @@
     <link rel="icon" type="image/x-icon" href="assets/Icon.png">
   </head>
   <body>
+    <div id="auth"> <!-- Login UI -->
+      <input id="email" type="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <button id="loginBtn">Login</button>
+      <button id="signupBtn">Sign Up</button>
+      <button id="logoutBtn" hidden>Logout</button>
+      <p id="authStatus"></p>
+    </div>
     <div id="calendarSection"> <!-- Calendar section -->
       <div id="calendarHeader"> <!-- Month + navigation -->
         <img id="animated" src="assets/Moon1.png" width="50px" height="50px"> <!-- Animated image -->
@@ -40,6 +48,8 @@
         <button id="add-todo">Add</button>
       </div>
     </div>
-    <script src="index.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>

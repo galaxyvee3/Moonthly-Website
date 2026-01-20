@@ -1,3 +1,44 @@
+import { auth, db } from "./firebase.js";
+import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+async function syncNotesToCloud() {
+  if (!auth.currentUser) return;
+  await setDoc(doc(db, "users", auth.currentUser.uid), {
+    calendarNotes: notes,
+    todoList: JSON.parse(localStorage.getItem("todoList")) || {},
+    updatedAt: Date.now()
+  });
+}
+
+async function loadFromCloud() {
+  if (!auth.currentUser) return;
+  const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
+  if (!snap.exists()) return;
+  const data = snap.data();
+  if (data.calendarNotes) {
+    notes = data.calendarNotes;
+    localStorage.setItem("calendarNotes", JSON.stringify(notes));
+  }
+  if (data.todoList) {
+    localStorage.setItem("todoList", JSON.stringify(data.todoList));
+    loadTodos();
+  }
+  buildCalendar(currentYear, currentMonth);
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    authStatus.textContent = "Logged in";
+    logoutBtn.hidden = false;
+    await syncNotesToCloud();
+    await loadFromCloud();
+  } else {
+    authStatus.textContent = "Offline / not logged in";
+    logoutBtn.hidden = true;
+  }
+});
+
 const calendar = document.getElementById('calendar');
 const modal = document.getElementById('noteModal');
 const modalDate = document.getElementById('modalDate');
@@ -77,6 +118,7 @@ document.getElementById('saveNote').addEventListener('click', () => {
     notes[selectedDate] = noteText.value;
     // Save to localStorage
     localStorage.setItem('calendarNotes', JSON.stringify(notes));
+    syncNotesToCloud();
     buildCalendar(currentYear, currentMonth); // refresh grid
   }
   modal.style.display = 'none';
@@ -87,6 +129,7 @@ document.getElementById('deleteNote').addEventListener('click', () => {
     notes[selectedDate] = "";
     // Save to localStorage
     localStorage.setItem('calendarNotes', JSON.stringify(notes));
+    syncNotesToCloud();
     buildCalendar(currentYear, currentMonth); // refresh grid
   }
   modal.style.display = 'none';
@@ -189,6 +232,7 @@ function saveTodos() {
     });
   });
   localStorage.setItem('todoList', JSON.stringify(todos));
+  syncNotesToCloud();
 }
 // Load tasks from localStorage
 function loadTodos() {
