@@ -74,6 +74,7 @@ export function buildCalendar(year, month) {
 // Save and delete notes
 document.getElementById('saveNote').addEventListener('click', async () => {
   if (!selectedDate) return;
+  notes[selectedDate] = text
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
   if (auth.currentUser) {
@@ -118,30 +119,52 @@ goToDateBtn.addEventListener('click', () => {
 });
 
 // To-do functions
-function addTask(text, done=false){
+function addTask(text, done = false) {
   const li = document.createElement('li');
-  const cb = document.createElement('input'); cb.type="checkbox"; cb.checked=done;
-  const txt = document.createTextNode(" "+text);
-  cb.addEventListener('change', ()=>saveTodos());
-  li.appendChild(cb); li.appendChild(txt);
+  // Checkbox
+  const checkbox = document.createElement('input');
+  checkbox.type = "checkbox";
+  checkbox.checked = done;
+  // Task text
+  const textNode = document.createTextNode(" " + text);
+  // Delete button
+  const deleteBtn = document.createElement('button');
+  deleteBtn.className = "delete-btn";
+  deleteBtn.textContent = "✕";
+  // Checkbox toggle
+  checkbox.addEventListener('change', () => {
+    li.classList.toggle('completed', checkbox.checked);
+    saveTodos();
+  });
+  // Delete task
+  deleteBtn.addEventListener('click', () => {
+    li.remove();
+    saveTodos();
+  });
+  if (done) li.classList.add('completed');
+  li.appendChild(checkbox);
+  li.appendChild(textNode);
+  li.appendChild(deleteBtn);
   list.appendChild(li);
 }
 
 addButton.addEventListener('click', ()=>{ if(input.value.trim()!==""){ addTask(input.value); input.value=""; }});
 input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addButton.click(); });
-
-toggleButton.addEventListener('click', ()=>{ 
-  todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex';
-});
+toggleButton.addEventListener('click', ()=>{ todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex'; });
 
 // Save and load todos
-export function saveTodos(){
-  const todos = Array.from(list.querySelectorAll('li')).map(li=>{
-    return {text: li.childNodes[1].textContent.trim(), done: li.childNodes[0].checked};
-  });
+export function saveTodos() {
+  const todos = Array.from(list.querySelectorAll('li')).map(li => ({
+    text: li.childNodes[1].textContent.trim(),
+    done: li.querySelector('input').checked
+  }));
   localStorage.setItem('todoList', JSON.stringify(todos));
-  if(auth.currentUser){
-    setDoc(doc(db,"users",auth.currentUser.uid), {todoList: todos}, {merge:true});
+  if (auth.currentUser) {
+    setDoc(
+      doc(db, "users", auth.currentUser.uid),
+      { todoList: todos },
+      { merge: true }
+    );
   }
 }
 
