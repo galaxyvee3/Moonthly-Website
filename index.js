@@ -1,14 +1,15 @@
 // index.js
 import { auth, db } from "./firebase.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// --- Global state ---
+// Global state
 export let notes = {}; // empty before login
 export let currentYear = new Date().getFullYear();
 export let currentMonth = new Date().getMonth();
 let selectedDate = null;
 
-// --- Elements ---
+// Elements
 const calendar = document.getElementById('calendar');
 const modal = document.getElementById('noteModal');
 const modalDate = document.getElementById('modalDate');
@@ -147,8 +148,38 @@ export function saveTodos(){
 export function loadTodos(){
   const saved = localStorage.getItem('todoList'); if(!saved) return;
   const todos = JSON.parse(saved);
-  list.innerHTML=""; todos.forEach(t=>addTask(t.text,t.done));
+  list.innerHTML = "";
+  todos.forEach(t=>addTask(t.text,t.done));
 }
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { // LOGGED OUT
+    notes = {};
+    list.innerHTML = ""; // clear todos
+    localStorage.removeItem("calendarNotes");
+    localStorage.removeItem("todoList");
+    buildCalendar(currentYear, currentMonth);
+    return;
+  }
+  try { // LOGGED IN
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      const data = snap.data();
+      notes = data.calendarNotes || {};
+      localStorage.setItem("calendarNotes", JSON.stringify(notes));
+      const todos = data.todoList || [];
+      localStorage.setItem("todoList", JSON.stringify(todos));
+      list.innerHTML = "";
+      todos.forEach(t => addTask(t.text, t.done));
+    } else {
+      notes = {};
+    }
+  } catch (err) {
+    console.error("Failed to load user data:", err);
+    notes = {};
+  }
+  buildCalendar(currentYear, currentMonth);
+});
 
 // Animated image
 const img = document.getElementById("animated");
@@ -157,8 +188,3 @@ const images = ["assets/Moon1.png","assets/Moon2.png","assets/Moon5.png","assets
 "assets/Moon4.png","assets/Moon7.png","assets/Moon8.png","assets/Moon11.png","assets/Moon12.png",
 "assets/Moon7.png","assets/Moon8.png"];
 let index=0; setInterval(()=>{ index=(index+1)%images.length; img.src=images[index]; },500);
-
-// Load initial state
-notes = JSON.parse(localStorage.getItem('calendarNotes')) || {};
-buildCalendar(currentYear,currentMonth);
-loadTodos();
