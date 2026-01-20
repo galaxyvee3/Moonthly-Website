@@ -73,7 +73,12 @@ export function buildCalendar(year, month) {
 // --- Save and delete notes ---
 document.getElementById('saveNote').addEventListener('click', async () => {
   if (!selectedDate) return;
-  notes[selectedDate] = noteText.value;
+  const text = noteText.value.trim();
+  if (text === "") {
+    delete notes[selectedDate];
+  } else {
+    notes[selectedDate] = text;
+  }
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
   if (auth.currentUser) {
