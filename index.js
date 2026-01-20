@@ -89,7 +89,7 @@ document.getElementById('saveNote').addEventListener('click', async () => {
 
 document.getElementById('deleteNote').addEventListener('click', async () => {
   if (!selectedDate) return;
-  delete notes[selectedDate];
+  notes[selectedDate] = "";
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
   if (auth.currentUser) {

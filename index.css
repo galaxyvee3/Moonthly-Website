@@ -227,10 +227,12 @@ body {
 }
 #todo-input {
   flex: 1;
+  font-size: 16px;
 }
 #add-todo {
   background-color: #F0E68C;
   white-space: nowrap;
+  font-size: 16px;
 }
 #add-todo:hover {
   background-color: #888;
