@@ -6,9 +6,9 @@ const firebaseConfig = {
   apiKey: "AIzaSyBaYm2yrrxROKVpiOGnHDkegKu9H_28Jys",
   authDomain: "moonthly-6bd9b.firebaseapp.com",
   projectId: "moonthly-6bd9b",
-  storageBucket: "moonthly-6bd9b.firebasestorage.app",
+  storageBucket: "moonthly-6bd9b.appspot.com",
   messagingSenderId: "784910931143",
-  appId: "1:784910931143:web:f68e5d6bb88545bd901ae2"
+  appId: "1:784910931143:web:f68e5d6bb88545bd901ae2",
 };
 
 export const app = initializeApp(firebaseConfig);
