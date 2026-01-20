@@ -113,7 +113,7 @@ function buildCalendar(year, month) {
   }
 }
 // Save note
-document.getElementById('saveNote').addEventListener('click', () => {
+document.getElementById('saveNote').addEventListener('click', async () => {
   // Dont save if user is not logged in 
   if (!auth.currentUser) {
     alert("Please log in to save notes.");
@@ -122,21 +122,25 @@ document.getElementById('saveNote').addEventListener('click', () => {
   }
   if (selectedDate) {
     notes[selectedDate] = noteText.value;
-    // Save to localStorage
     localStorage.setItem('calendarNotes', JSON.stringify(notes));
-    syncNotesToCloud();
-    buildCalendar(currentYear, currentMonth); // refresh grid
+    await setDoc(doc(db, "users", auth.currentUser.uid), { calendarNotes: notes }, { merge: true });
+    buildCalendar(currentYear, currentMonth);
   }
   modal.style.display = 'none';
 });
 // Delete note
-document.getElementById('deleteNote').addEventListener('click', () => {
+document.getElementById('deleteNote').addEventListener('click', async () => {
+  // Dont delete if user is not logged in 
+  if (!auth.currentUser) {
+    alert("Login to delete notes");
+    modal.style.display = 'none';
+    return;
+  }
   if (selectedDate) {
-    notes[selectedDate] = "";
-    // Save to localStorage
+    delete notes[selectedDate];
     localStorage.setItem('calendarNotes', JSON.stringify(notes));
-    syncNotesToCloud();
-    buildCalendar(currentYear, currentMonth); // refresh grid
+    await setDoc(doc(db, "users", auth.currentUser.uid), { calendarNotes: notes }, { merge: true });
+    buildCalendar(currentYear, currentMonth);
   }
   modal.style.display = 'none';
 });

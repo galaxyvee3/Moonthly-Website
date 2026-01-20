@@ -1,10 +1,12 @@
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { buildCalendar, loadTodos, notes, currentYear, currentMonth } from "./index.js"; // import your calendar helpers
 
 const email = document.getElementById("email");
 const password = document.getElementById("password");
@@ -13,46 +15,48 @@ const logoutBtn = document.getElementById("logoutBtn");
 const loginBtn = document.getElementById("loginBtn");
 const signupBtn = document.getElementById("signupBtn");
 
-// Login button
-loginBtn.onclick = async () => {
-  try {
-    await signInWithEmailAndPassword(auth, email.value, password.value);
-    status.textContent = "Logged in!";
-  } catch (err) {
-    status.textContent = err.message;
-    console.error(err);
-  }
-};
+loginBtn.onclick = () => signInWithEmailAndPassword(auth, email.value, password.value)
+  .catch(err => status.textContent = err.message);
 
-// Signup button
-signupBtn.onclick = async () => {
-  try {
-    await createUserWithEmailAndPassword(auth, email.value, password.value);
-    status.textContent = "Account created!";
-  } catch (err) {
-    status.textContent = err.message;
-    console.error(err);
-  }
-};
+signupBtn.onclick = () => createUserWithEmailAndPassword(auth, email.value, password.value)
+  .catch(err => status.textContent = err.message);
 
-// Logout button
-logoutBtn.onclick = async () => {
-  try {
-    await signOut(auth);
-    status.textContent = "Logged out!";
-  } catch (err) {
-    status.textContent = err.message;
-    console.error(err);
-  }
-};
+logoutBtn.onclick = () => signOut(auth);
 
-// Show login state
-onAuthStateChanged(auth, (user) => {
+// Load Firestore notes & todos
+async function loadFromCloud(user) {
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (snap.exists()) {
+    const data = snap.data();
+    if (data.calendarNotes) {
+      Object.assign(notes, data.calendarNotes); // update notes object
+      localStorage.setItem("calendarNotes", JSON.stringify(notes));
+    }
+    if (data.todoList) {
+      localStorage.setItem("todoList", JSON.stringify(data.todoList));
+      loadTodos();
+    }
+  }
+  buildCalendar(currentYear, currentMonth); // refresh calendar after notes loaded
+}
+
+// Auth state listener
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     status.textContent = `Logged in as ${user.email}`;
     logoutBtn.hidden = false;
+
+    await loadFromCloud(user); // ensures calendar & todos show even after refresh
   } else {
     status.textContent = "Offline / not logged in";
     logoutBtn.hidden = true;
+
+    // Clear notes & todos (optional: keep offline ones)
+    for (const key in notes) delete notes[key];
+    localStorage.removeItem("calendarNotes");
+    localStorage.removeItem("todoList");
+
+    buildCalendar(currentYear, currentMonth); // show blank calendar
+    loadTodos();                               // show empty todo list
   }
 });
