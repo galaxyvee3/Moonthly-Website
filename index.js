@@ -121,50 +121,49 @@ goToDateBtn.addEventListener('click', () => {
 // To-do functions
 function addTask(text, done = false) {
   const li = document.createElement('li');
-  // Checkbox
   const checkbox = document.createElement('input');
   checkbox.type = "checkbox";
   checkbox.checked = done;
-  // Task text
   const textNode = document.createTextNode(" " + text);
-  // Delete button
   const deleteBtn = document.createElement('button');
-  deleteBtn.className = "delete-btn";
+  deleteBtn.className = 'delete-btn';
   deleteBtn.textContent = "✕";
-  // Checkbox toggle
   checkbox.addEventListener('change', () => {
     li.classList.toggle('completed', checkbox.checked);
     saveTodos();
   });
-  // Delete task
   deleteBtn.addEventListener('click', () => {
     li.remove();
     saveTodos();
   });
-  if (done) li.classList.add('completed');
   li.appendChild(checkbox);
   li.appendChild(textNode);
   li.appendChild(deleteBtn);
+  if (done) li.classList.add('completed');
   list.appendChild(li);
 }
 
-addButton.addEventListener('click', ()=>{ if(input.value.trim()!==""){ addTask(input.value); input.value=""; }});
-input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addButton.click(); });
-toggleButton.addEventListener('click', ()=>{ todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex'; });
+// Add new task
+addButton.addEventListener('click', () => {
+  if (input.value.trim() !== "") {
+    addTask(input.value);
+    input.value = "";
+    saveTodos();
+  }
+});
+
+input.addEventListener('keydown', (e) => { if (e.key === 'Enter') addButton.click(); });
+// Toggle to-do panel
+toggleButton.addEventListener('click', () => { todoContainer.style.display = todoContainer.style.display === 'flex' ? 'none' : 'flex'; });
 
 // Save and load todos
-export function saveTodos() {
-  const todos = Array.from(list.querySelectorAll('li')).map(li => ({
-    text: li.childNodes[1].textContent.trim(),
-    done: li.querySelector('input').checked
-  }));
+export function saveTodos(){
+  const todos = Array.from(list.querySelectorAll('li')).map(li=>{
+    return {text: li.childNodes[1].textContent.trim(), done: li.childNodes[0].checked};
+  });
   localStorage.setItem('todoList', JSON.stringify(todos));
-  if (auth.currentUser) {
-    setDoc(
-      doc(db, "users", auth.currentUser.uid),
-      { todoList: todos },
-      { merge: true }
-    );
+  if(auth.currentUser){
+    setDoc(doc(db,"users",auth.currentUser.uid), {todoList: todos}, {merge:true});
   }
 }
 
@@ -194,9 +193,7 @@ onAuthStateChanged(auth, async (user) => {
       localStorage.setItem("todoList", JSON.stringify(todos));
       list.innerHTML = "";
       todos.forEach(t => addTask(t.text, t.done));
-    } else {
-      notes = {};
-    }
+    } else { notes = {}; }
   } catch (err) {
     console.error("Failed to load user data:", err);
     notes = {};
