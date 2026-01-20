@@ -2,13 +2,13 @@
 import { auth, db } from "./firebase.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Global state
+// --- Global state ---
 export let notes = {}; // empty before login
 export let currentYear = new Date().getFullYear();
 export let currentMonth = new Date().getMonth();
 let selectedDate = null;
 
-// Elements
+// --- Elements ---
 const calendar = document.getElementById('calendar');
 const modal = document.getElementById('noteModal');
 const modalDate = document.getElementById('modalDate');
@@ -51,20 +51,11 @@ export function buildCalendar(year, month) {
     const dayNum = document.createElement('div'); dayNum.textContent = d; dayNum.style.fontWeight="bold";
     const notePreview = document.createElement('div');
     const dateKey = `${year}-${month+1}-${d}`;
-    if (
-      typeof notes[dateKey] === "string" &&
-      notes[dateKey].trim().length > 0
-    ) {
-      const ul = document.createElement("ul");
-      ul.classList.add("note-preview");
-      notes[dateKey]
-        .split("\n")
-        .filter(line => line.trim() !== "")
-        .forEach(line => {
-          const li = document.createElement("li");
-          li.textContent = line;
-          ul.appendChild(li);
-        });
+    if(notes[dateKey]){
+      const ul = document.createElement("ul"); ul.classList.add("note-preview");
+      notes[dateKey].split("\n").filter(l=>l.trim()!=="").forEach(line=>{
+        const li = document.createElement("li"); li.textContent=line; ul.appendChild(li);
+      });
       notePreview.appendChild(ul);
     }
     cell.appendChild(dayNum);
@@ -82,12 +73,6 @@ export function buildCalendar(year, month) {
 // Save and delete notes
 document.getElementById('saveNote').addEventListener('click', async () => {
   if (!selectedDate) return;
-  const text = noteText.value.trim();
-  if (text === "") {
-    delete notes[selectedDate];
-  } else {
-    notes[selectedDate] = text;
-  }
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
   if (auth.currentUser) {
@@ -102,7 +87,7 @@ document.getElementById('saveNote').addEventListener('click', async () => {
 
 document.getElementById('deleteNote').addEventListener('click', async () => {
   if (!selectedDate) return;
-  delete notes[selectedDate];
+  notes[selectedDate] = "";
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
   if (auth.currentUser) {
@@ -143,7 +128,10 @@ function addTask(text, done=false){
 
 addButton.addEventListener('click', ()=>{ if(input.value.trim()!==""){ addTask(input.value); input.value=""; }});
 input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addButton.click(); });
-toggleButton.addEventListener('click', ()=>{ todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex'; });
+
+toggleButton.addEventListener('click', ()=>{ 
+  todoContainer.style.display = todoContainer.style.display==='flex'?'none':'flex';
+});
 
 // Save and load todos
 export function saveTodos(){

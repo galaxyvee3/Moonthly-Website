@@ -46,6 +46,11 @@ logoutBtn.addEventListener("click", async () => {
   } catch (err) {
     console.error(err);
   }
+  status.textContent = "Offline";
+  logoutBtn.hidden = true;
+  // Clear calendar
+  buildCalendar(currentYear, currentMonth);
+  loadTodos();
 });
 
 // Auth state change
@@ -72,11 +77,10 @@ onAuthStateChanged(auth, async (user) => {
     }
     // Refresh calendar with notes
     buildCalendar(currentYear, currentMonth);
-  } else {
-    // Not logged in
+  } else { // Not logged in
     status.textContent = "Offline";
     logoutBtn.hidden = true;
-    // Clear notes/todos from calendar view
+    // Clear calendar
     buildCalendar(currentYear, currentMonth);
     loadTodos();
   }
