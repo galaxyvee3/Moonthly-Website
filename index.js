@@ -79,20 +79,6 @@ document.getElementById('saveNote').addEventListener('click', async () => {
   notes[selectedDate] = noteText.value;
   localStorage.setItem('calendarNotes', JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
-  // Fade in ONLY new notes
-  if (isNewNote) {
-    const dateCells = calendar.querySelectorAll('.day');
-    dateCells.forEach(cell => {
-      const dayNum = cell.querySelector('div').textContent;
-      const dateKey = `${currentYear}-${currentMonth+1}-${dayNum}`;
-      if (dateKey === selectedDate) {
-        const ul = cell.querySelector('.note-preview');
-        if (ul) {
-          ul.classList.add('fade-in');
-        }
-      }
-    });
-  }
   if (auth.currentUser) {
     try {
       await setDoc(doc(db, "users", auth.currentUser.uid), { calendarNotes: notes }, { merge: true });
