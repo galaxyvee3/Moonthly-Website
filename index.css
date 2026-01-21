@@ -139,6 +139,8 @@ body {
   padding-left: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.fade-in {
   opacity: 0;
   animation: fadeIn 0.8s ease forwards;
 }
