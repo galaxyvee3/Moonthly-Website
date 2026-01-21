@@ -62,15 +62,15 @@ body {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  background: #1C1F2A;
-  border: 1px solid #888;
+  background: #0B0D17;
+  border: 1px solid #2A2D3A;
   padding: 20px;
 }
 #jumpTo {
   display: flex;
   gap: 5px;
 }
-/* All gray buttons */
+/* Gray buttons */
 #email,
 #password,
 #loginBtn,
@@ -330,7 +330,6 @@ body {
   cursor: pointer;
   z-index: 1000;
 }
-/* Information button */
 #infoBtn:hover {
   background: #44475a;
 }
@@ -354,5 +353,5 @@ body {
 }
 #infoContent h2 {
   margin-top: 0;
-  text-shadow: 0 0 5px #F5F5F5;
+  color: #F5F5F5;
 }
