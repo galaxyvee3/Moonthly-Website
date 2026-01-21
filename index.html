@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="assets/Icon.png">
   </head>
   <body>
+    <button id="infoBtn" title="Information">ℹ</button>
     <div id="auth"> <!-- Login menu -->
       <input id="email" type="email" placeholder="Email">
       <input id="password" type="password" placeholder="Password">
@@ -41,6 +42,20 @@
       <button id="saveNote">Save</button>
       <button id="deleteNote">Delete</button>
       <button id="closeModal">Close</button>
+    </div>
+    <div id="infoModal"> <!-- Information button -->
+      <div id="infoContent">
+        <h2>About Moonthly 🌙</h2>
+        <p>Moonthly is a personal calendar and task manager designed to help you organize events, notes, and daily to-dos in one place.</p>
+        <ul>
+          <li>Log in to save your data!</li>
+          <li>Click a day to add or edit events.</li>
+          <li>Save notes for each date.</li>
+          <li>Manage tasks with the to-do list.</li>
+          <li>Jump to any month and year.</li>
+        </ul>
+        <button id="closeInfo">Close</button>
+      </div>
     </div>
     <button id="todo-toggle">To Do List</button> <!-- Toggle button -->
     <div id="todo-container"> <!-- To do list panel -->

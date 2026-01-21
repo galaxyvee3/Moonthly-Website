@@ -313,3 +313,44 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+/* Info button */
+#infoBtn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  font-size: 20px;
+  background: #1e1e2e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  z-index: 1000;
+}
+/* Information button */
+#infoBtn:hover {
+  background: #3a3a5e;
+}
+#infoModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+#infoContent {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  text-align: center;
+}
+#infoContent h2 {
+  margin-top: 0;
+}
+#infoContent button {
+  margin-top: 10px;
+}
