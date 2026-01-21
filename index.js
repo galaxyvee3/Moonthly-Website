@@ -10,6 +10,7 @@ export let currentMonth = new Date().getMonth();
 let selectedDate = null;
 
 // Elements
+const authContainer = document.getElementById('auth');
 const calendar = document.getElementById('calendar');
 const modal = document.getElementById('noteModal');
 const modalDate = document.getElementById('modalDate');
@@ -176,13 +177,15 @@ export function loadTodos(){
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) { // LOGGED OUT
+    authContainer.style.display = "block";
     notes = {};
-    list.innerHTML = ""; // clear todos
+    list.innerHTML = "";
     localStorage.removeItem("calendarNotes");
     localStorage.removeItem("todoList");
     buildCalendar(currentYear, currentMonth);
     return;
   }
+  authContainer.style.display = "none";
   try { // LOGGED IN
     const snap = await getDoc(doc(db, "users", user.uid));
     if (snap.exists()) {

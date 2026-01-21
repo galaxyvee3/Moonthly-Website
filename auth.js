@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/f
 import { notes, buildCalendar, currentYear, currentMonth, loadTodos } from "./index.js";
 
 // Elements
+const authContainer = document.getElementById("auth");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const loginBtn = document.getElementById("loginBtn");
@@ -24,9 +25,8 @@ loginBtn.addEventListener("click", async () => {
 
 // Signup
 signupBtn.addEventListener("click", async () => {
-  try {
+  try { // Create empty Firestore document for new user
     const userCredential = await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-    // Create empty Firestore document for new user
     await setDoc(doc(db, "users", userCredential.user.uid), {
       calendarNotes: {},
       todoList: [],
@@ -57,6 +57,7 @@ logoutBtn.addEventListener("click", async () => {
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     status.textContent = "Logged in: " + user.email;
+    authContainer.style.display = "none";
     logoutBtn.hidden = false;
     try { // Load users notes and todos from Firestore
       const snap = await getDoc(doc(db, "users", user.uid));
@@ -80,6 +81,7 @@ onAuthStateChanged(auth, async (user) => {
     buildCalendar(currentYear, currentMonth);
   } else { // Not logged in
     status.textContent = "Logged out";
+    authContainer.style.display = "block";
     logoutBtn.hidden = true;
     // Clear calendar
     buildCalendar(currentYear, currentMonth);

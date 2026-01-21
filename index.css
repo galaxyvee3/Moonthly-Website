@@ -15,6 +15,7 @@ body {
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
 }
+/* Boxes for each day */
 .day {
   border: 1px solid #444;
   padding: 8px;
@@ -69,6 +70,7 @@ body {
   display: flex;
   gap: 5px;
 }
+/* All gray buttons */
 #email,
 #password,
 #loginBtn,
@@ -88,18 +90,6 @@ body {
   padding: 4px 6px;
   cursor: pointer;
 }
-#email,
-#password {
-  width: 10rem;
-  font-size: 16px;
-  cursor: text;
-}
-#loginBtn,
-#signupBtn,
-#logoutBtn {
-  width: 4rem;
-  font-size: 16px;
-}
 #email:hover,
 #password:hover,
 #loginBtn:hover,
@@ -112,6 +102,19 @@ body {
 #jumpTo button:hover,
 #todo-input:hover {
   background: #44475a;
+}
+#email,
+#password {
+  width: 10rem;
+  font-size: 16px;
+  cursor: text;
+}
+#loginBtn,
+#signupBtn,
+#logoutBtn {
+  width: 4rem;
+  font-size: 16px;
+  margin-top: 5px;
 }
 .weekdays {
   display: grid;
@@ -235,7 +238,7 @@ body {
   font-size: 16px;
 }
 #add-todo:hover {
-  background-color: #888;
+  background-color: #F5F5F5;
 }
 #listLabel {
   text-align: center;
@@ -302,4 +305,11 @@ body {
 }
 .delete-btn:hover {
   background-color: #ff1a1a;
+}
+#auth {
+  transition: opacity 0.3s ease;
+}
+.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
