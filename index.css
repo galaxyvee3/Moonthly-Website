@@ -319,9 +319,8 @@ body {
   top: 12px;
   right: 12px;
   font-size: 20px;
-  background: #1e1e2e;
+  background: #2A2D3A;
   color: white;
-  border: none;
   border-radius: 50%;
   width: 36px;
   height: 36px;
@@ -330,7 +329,7 @@ body {
 }
 /* Information button */
 #infoBtn:hover {
-  background: #3a3a5e;
+  background: #44475a;
 }
 #infoModal {
   position: fixed;
@@ -342,7 +341,8 @@ body {
   z-index: 1001;
 }
 #infoContent {
-  background: #ffffff;
+  background: #0B0D17;
+  color: #F0E68C;
   padding: 20px;
   border-radius: 12px;
   max-width: 400px;
