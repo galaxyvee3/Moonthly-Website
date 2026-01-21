@@ -337,7 +337,6 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 5px #444;
   display: none;
   align-items: center;
   justify-content: center;
@@ -347,13 +346,11 @@ body {
   background: #0B0D17;
   color: #F0E68C;
   padding: 20px;
+  box-shadow: 0 0 5px #444;
   border-radius: 12px;
   max-width: 400px;
   text-align: center;
 }
 #infoContent h2 {
   margin-top: 0;
-}
-#infoContent button {
-  margin-top: 10px;
 }
