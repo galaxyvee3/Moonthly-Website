@@ -7,19 +7,21 @@
     <link rel="icon" type="image/x-icon" href="assets/Icon.png">
   </head>
   <body>
-    <div id="auth"> <!-- Login UI -->
+    <div id="auth"> <!-- Login menu -->
       <input id="email" type="email" placeholder="Email">
       <input id="password" type="password" placeholder="Password">
       <button id="loginBtn">Login</button>
       <button id="signupBtn">Sign Up</button>
-    </div> 
-    <p id="authStatus"></p>
-    <button id="logoutBtn" hidden>Logout</button>
+    </div>
+    <div> <!-- Logout info -->
+      <p id="authStatus"></p>
+      <button id="logoutBtn" hidden>Logout</button>
+        <img id="animated" src="assets/Moon1.png" width="50px" height="50px"> <!-- Animated image -->
+    </div>
     <div id="calendarSection"> <!-- Calendar section -->
       <div id="calendarHeader"> <!-- Month + navigation -->
-        <img id="animated" src="assets/Moon1.png" width="50px" height="50px"> <!-- Animated image -->
-        <h2 id="monthLabel" style="font-size: 36px;"></h2>
         <button id="prevMonth">←</button>
+        <h2 id="monthLabel" style="font-size: 36px;"></h2>
         <button id="nextMonth">→</button>
       </div>
       <div class="weekdays"> <!-- Weekday labels -->
