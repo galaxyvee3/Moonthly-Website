@@ -113,7 +113,8 @@ body {
 }
 #loginBtn,
 #signupBtn,
-#logoutBtn {
+#logoutBtn,
+#closeInfo {
   width: 4rem;
   font-size: 16px;
   margin-top: 5px;
@@ -353,4 +354,5 @@ body {
 }
 #infoContent h2 {
   margin-top: 0;
+  text-shadow: 0 0 5px #F5F5F5;
 }
