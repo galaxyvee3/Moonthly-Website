@@ -62,8 +62,8 @@ body {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  background: #0B0D17;
-  border: 1px solid #2A2D3A;
+  background: #1C1F2A;
+  border: 1px solid #444;
   padding: 20px;
 }
 #jumpTo {
@@ -343,7 +343,7 @@ body {
   z-index: 1001;
 }
 #infoContent {
-  background: #0B0D17;
+  background: #1C1F2A;
   color: #F0E68C;
   padding: 20px;
   box-shadow: 0 0 5px #444;
