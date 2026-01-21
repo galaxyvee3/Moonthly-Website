@@ -206,10 +206,23 @@ onAuthStateChanged(auth, async (user) => {
   buildCalendar(currentYear, currentMonth);
 });
 
-// Animated image
-const img = document.getElementById("animated");
+// Animate images
 const images = ["assets/Moon1.png","assets/Moon2.png","assets/Moon5.png","assets/Moon6.png",
 "assets/Moon9.png","assets/Moon10.png","assets/Moon5.png","assets/Moon6.png","assets/Moon3.png",
 "assets/Moon4.png","assets/Moon7.png","assets/Moon8.png","assets/Moon11.png","assets/Moon12.png",
 "assets/Moon7.png","assets/Moon8.png"];
-let index=0; setInterval(()=>{ index=(index+1)%images.length; img.src=images[index]; },500);
+// First moon
+const img1 = document.getElementById("animated1");
+let index1 = 0;
+setInterval(()=>{
+  index1 = (index1 + 1) % images.length;
+  img1.src = images[index1];
+},500);
+// Second moon
+const img2 = document.getElementById("animated2");
+let index2 = images.length - 1;
+setInterval(()=>{
+  img2.src = images[index2];
+  images--;
+  if (index2 < 0) index2 = images.length - 1;
+},500);
