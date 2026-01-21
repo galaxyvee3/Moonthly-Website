@@ -10,29 +10,29 @@ export let currentMonth = new Date().getMonth();
 let selectedDate = null;
 
 // Elements
-const authContainer = document.getElementById('auth');
-const calendar = document.getElementById('calendar');
-const modal = document.getElementById('noteModal');
-const modalDate = document.getElementById('modalDate');
-const noteText = document.getElementById('noteText');
-const monthLabel = document.getElementById('monthLabel');
-const prevMonthBtn = document.getElementById('prevMonth');
-const nextMonthBtn = document.getElementById('nextMonth');
-const monthSelect = document.getElementById('monthSelect');
-const yearInput = document.getElementById('yearInput');
-const goToDateBtn = document.getElementById('goToDate');
+const authContainer = document.getElementById("auth");
+const calendar = document.getElementById("calendar");
+const modal = document.getElementById("noteModal");
+const modalDate = document.getElementById("modalDate");
+const noteText = document.getElementById("noteText");
+const monthLabel = document.getElementById("monthLabel");
+const prevMonthBtn = document.getElementById("prevMonth");
+const nextMonthBtn = document.getElementById("nextMonth");
+const monthSelect = document.getElementById("monthSelect");
+const yearInput = document.getElementById("yearInput");
+const goToDateBtn = document.getElementById("goToDate");
 
 // To-do elements
-const toggleButton = document.getElementById('todo-toggle');
-const todoContainer = document.getElementById('todo-container');
-const addButton = document.getElementById('add-todo');
-const input = document.getElementById('todo-input');
-const list = document.getElementById('todo-list');
+const toggleButton = document.getElementById("todo-toggle");
+const todoContainer = document.getElementById("todo-container");
+const addButton = document.getElementById("add-todo");
+const input = document.getElementById("todo-input");
+const list = document.getElementById("todo-list");
 
 // Month names
 const monthNames = [ "January","February","March","April","May","June","July","August","September","October","November","December"];
 monthNames.forEach((m, i) => {
-  const opt = document.createElement('option');
+  const opt = document.createElement("option");
   opt.value = i;
   opt.textContent = m;
   monthSelect.appendChild(opt);
@@ -46,12 +46,12 @@ export function buildCalendar(year, month) {
   monthLabel.textContent = `${monthNames[month]} ${year}`;
   monthSelect.value = month;
   yearInput.value = year;
-  for (let i = 0; i < firstDay; i++) calendar.appendChild(document.createElement('div'));
+  for (let i = 0; i < firstDay; i++) calendar.appendChild(document.createElement("div"));
   for (let d = 1; d <= daysInMonth; d++) {
-    const cell = document.createElement('div');
-    cell.classList.add('day');
-    const dayNum = document.createElement('div'); dayNum.textContent = d; dayNum.style.fontWeight="bold";
-    const notePreview = document.createElement('div');
+    const cell = document.createElement("div");
+    cell.classList.add("day");
+    const dayNum = document.createElement("div"); dayNum.textContent = d; dayNum.style.fontWeight="bold";
+    const notePreview = document.createElement("div");
     const dateKey = `${year}-${month+1}-${d}`;
     if(notes[dateKey]){
       const ul = document.createElement("ul"); ul.classList.add("note-preview");
@@ -85,13 +85,13 @@ document.getElementById('saveNote').addEventListener('click', async () => {
       console.error("Error syncing notes to Firestore:", err);
     }
   }
-  modal.style.display = 'none';
+  modal.style.display = "none";
 });
 
-document.getElementById('deleteNote').addEventListener('click', async () => {
+document.getElementById("deleteNote").addEventListener("click", async () => {
   if (!selectedDate) return;
   notes[selectedDate] = "";
-  localStorage.setItem('calendarNotes', JSON.stringify(notes));
+  localStorage.setItem("calendarNotes", JSON.stringify(notes));
   buildCalendar(currentYear, currentMonth);
   if (auth.currentUser) {
     try {
@@ -100,52 +100,52 @@ document.getElementById('deleteNote').addEventListener('click', async () => {
       console.error("Error syncing note deletion:", err);
     }
   }
-  modal.style.display = 'none';
+  modal.style.display = "none";
 });
 
-document.getElementById('closeModal').addEventListener('click', ()=>{ modal.style.display='none'; });
+document.getElementById("closeModal").addEventListener("click", ()=>{ modal.style.display = "none"; });
 
 // Calendar navigation
-prevMonthBtn.addEventListener('click', () => {
+prevMonthBtn.addEventListener("click", () => {
   currentMonth--; if(currentMonth<0){currentMonth=11; currentYear--;}
   buildCalendar(currentYear,currentMonth);
 });
-nextMonthBtn.addEventListener('click', () => {
+nextMonthBtn.addEventListener("click", () => {
   currentMonth++; if(currentMonth>11){currentMonth=0; currentYear++;}
   buildCalendar(currentYear,currentMonth);
 });
-goToDateBtn.addEventListener('click', () => {
+goToDateBtn.addEventListener("click", () => {
   const m=parseInt(monthSelect.value), y=parseInt(yearInput.value);
   if(!isNaN(m) && !isNaN(y)){ currentMonth=m; currentYear=y; buildCalendar(currentYear,currentMonth);}
 });
 
 // To-do functions
 function addTask(text, done = false) {
-  const li = document.createElement('li');
-  const checkbox = document.createElement('input');
+  const li = document.createElement("li");
+  const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.checked = done;
   const textNode = document.createTextNode(" " + text);
-  const deleteBtn = document.createElement('button');
-  deleteBtn.className = 'delete-btn';
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete-btn";
   deleteBtn.textContent = "✕";
-  checkbox.addEventListener('change', () => {
-    li.classList.toggle('completed', checkbox.checked);
+  checkbox.addEventListener("change", () => {
+    li.classList.toggle("completed", checkbox.checked);
     saveTodos();
   });
-  deleteBtn.addEventListener('click', () => {
+  deleteBtn.addEventListener("click", () => {
     li.remove();
     saveTodos();
   });
   li.appendChild(checkbox);
   li.appendChild(textNode);
   li.appendChild(deleteBtn);
-  if (done) li.classList.add('completed');
+  if (done) li.classList.add("completed");
   list.appendChild(li);
 }
 
 // Add new task
-addButton.addEventListener('click', () => {
+addButton.addEventListener("click", () => {
   if (input.value.trim() !== "") {
     addTask(input.value);
     input.value = "";
@@ -153,23 +153,23 @@ addButton.addEventListener('click', () => {
   }
 });
 
-input.addEventListener('keydown', (e) => { if (e.key === 'Enter') addButton.click(); });
+input.addEventListener("keydown", (e) => { if (e.key === "Enter") addButton.click(); });
 // Toggle to-do panel
-toggleButton.addEventListener('click', () => { todoContainer.style.display = todoContainer.style.display === 'flex' ? 'none' : 'flex'; });
+toggleButton.addEventListener("click", () => { todoContainer.style.display = todoContainer.style.display === "flex" ? "none" : "flex"; });
 
 // Save and load todos
 export function saveTodos(){
-  const todos = Array.from(list.querySelectorAll('li')).map(li=>{
+  const todos = Array.from(list.querySelectorAll("li")).map(li=>{
     return {text: li.childNodes[1].textContent.trim(), done: li.childNodes[0].checked};
   });
-  localStorage.setItem('todoList', JSON.stringify(todos));
+  localStorage.setItem("todoList", JSON.stringify(todos));
   if(auth.currentUser){
     setDoc(doc(db,"users",auth.currentUser.uid), {todoList: todos}, {merge:true});
   }
 }
 
 export function loadTodos(){
-  const saved = localStorage.getItem('todoList'); if(!saved) return;
+  const saved = localStorage.getItem("todoList"); if(!saved) return;
   const todos = JSON.parse(saved);
   list.innerHTML = "";
   todos.forEach(t=>addTask(t.text,t.done));
@@ -189,8 +189,8 @@ onAuthStateChanged(auth, async (user) => {
   try { // LOGGED IN
     const snap = await getDoc(doc(db, "users", user.uid));
     if (snap.exists()) {
-      document.getElementById('email').value = "";
-      document.getElementById('password').value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
       const data = snap.data();
       notes = data.calendarNotes || {};
       localStorage.setItem("calendarNotes", JSON.stringify(notes));
@@ -215,14 +215,14 @@ const images = ["assets/Moon1.png","assets/Moon2.png","assets/Moon5.png","assets
 const img1 = document.getElementById("animated1");
 let index1 = 0;
 setInterval(()=>{
-  index1 = (index1 + 1) % images.length;
   img1.src = images[index1];
-},500);
+  index1 = (index1 + 1) % images.length;
+}, 500);
 // Second moon
 const img2 = document.getElementById("animated2");
 let index2 = images.length - 1;
 setInterval(()=>{
   img2.src = images[index2];
-  images--;
+  index2--;
   if (index2 < 0) index2 = images.length - 1;
-},500);
+}, 500);

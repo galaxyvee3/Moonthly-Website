@@ -62,8 +62,8 @@ onAuthStateChanged(auth, async (user) => {
     try { // Load users notes and todos from Firestore
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
-        document.getElementById('email').value = "";
-        document.getElementById('password').value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
         const data = snap.data();
         if (data.calendarNotes) {
           Object.assign(notes, data.calendarNotes); // update the exported notes object
