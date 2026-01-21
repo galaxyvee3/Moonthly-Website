@@ -76,6 +76,7 @@ body {
 #loginBtn,
 #signupBtn,
 #logoutBtn,
+#closeInfo,
 #saveNote,
 #deleteNote,
 #closeModal,
@@ -95,6 +96,7 @@ body {
 #loginBtn:hover,
 #signupBtn:hover,
 #logoutBtn:hover,
+#closeInfo:hover,
 #calendarHeader button:hover,
 #saveNote:hover,
 #deleteNote:hover,
@@ -335,6 +337,7 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 5px #444;
   display: none;
   align-items: center;
   justify-content: center;
