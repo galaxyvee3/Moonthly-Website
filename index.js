@@ -11,8 +11,6 @@ let selectedDate = null;
 
 // Elements
 const authContainer = document.getElementById("auth");
-const infoBtn = document.getElementById("infoBtn");
-const infoModal = document.getElementById("infoModal");
 const closeInfo = document.getElementById("closeInfo");
 const calendar = document.getElementById("calendar");
 const modal = document.getElementById("noteModal");
@@ -38,10 +36,6 @@ monthNames.forEach((m, i) => {
   opt.textContent = m;
   monthSelect.appendChild(opt);
 });
-
-// Information window
-infoBtn.addEventListener("click", () => { infoModal.style.display = "flex"; });
-closeInfo.addEventListener("click", () => { infoModal.style.display = "none"; });
 
 // Close when clicking outside the box
 infoModal.addEventListener("click", (e) => { if (e.target === infoModal) { infoModal.style.display = "none"; } });
@@ -171,7 +165,7 @@ export function saveTodos(){
     return {text: li.childNodes[1].textContent.trim(), done: li.childNodes[0].checked};
   });
   localStorage.setItem("todoList", JSON.stringify(todos));
-  if(auth.currentUser){
+  if(auth.currentUser) {
     setDoc(doc(db,"users",auth.currentUser.uid), {todoList: todos}, {merge:true});
   }
 }
@@ -234,3 +228,9 @@ setInterval(()=>{
   index2--;
   if (index2 < 0) index2 = images.length - 1;
 }, 500);
+
+// Menu section
+const menuButton = document.getElementById("menuButton");
+const sideMenu = document.getElementById("sideMenu");
+menuButton.addEventListener("click", () => { sideMenu.style.display = sideMenu.style.display === "block" ? "none" : "block"; });
+document.addEventListener("click", (e) => { if ( !sideMenu.contains(e.target) && e.target !== menuButton) { sideMenu.style.display = "none"; } });

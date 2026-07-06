@@ -71,18 +71,9 @@ body {
   gap: 5px;
 }
 /* Gray buttons */
-#email,
-#password,
-#loginBtn,
-#signupBtn,
-#logoutBtn,
-#closeInfo,
-#saveNote,
-#deleteNote,
-#closeModal,
-#jumpTo select,
-#jumpTo input,
-#jumpTo button {
+button,
+input,
+select {
   font-family: 'PixelFont', monospace;
   background: #2A2D3A;
   color: #F5F5F5;
@@ -91,18 +82,9 @@ body {
   padding: 4px 6px;
   cursor: pointer;
 }
-#email:hover,
-#password:hover,
-#loginBtn:hover,
-#signupBtn:hover,
-#logoutBtn:hover,
-#closeInfo:hover,
-#calendarHeader button:hover,
-#saveNote:hover,
-#deleteNote:hover,
-#closeModal:hover,
-#jumpTo button:hover,
-#todo-input:hover {
+button:hover,
+input:hover,
+select:hover {
   background: #44475a;
 }
 #email,
@@ -111,10 +93,10 @@ body {
   font-size: 16px;
   cursor: text;
 }
+#menuBtn,
 #loginBtn,
 #signupBtn,
-#logoutBtn,
-#closeInfo {
+#logoutBtn {
   width: 4rem;
   font-size: 16px;
   margin-top: 5px;
@@ -316,42 +298,33 @@ body {
   opacity: 0;
   pointer-events: none;
 }
-/* Info button */
-#infoBtn {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  font-size: 20px;
-  background: #2A2D3A;
-  color: white;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  z-index: 1000;
+/* Menu section */
+#menuButton{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:45px;
+    height:45px;
+    font-size:24px;
+    cursor:pointer;
 }
-#infoBtn:hover {
-  background: #44475a;
+#sideMenu{
+    display:none;
+    position:absolute;
+    top:75px;
+    right:20px;
+    width:300px;
+    background:#2b2b40;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
+    z-index:999;
 }
-#infoModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
+.menu-section{
+    margin-bottom:20px;
 }
-#infoContent {
-  background: #1C1F2A;
-  color: #F0E68C;
-  padding: 20px;
-  box-shadow: 0 0 5px #444;
-  border-radius: 12px;
-  max-width: 400px;
-  text-align: center;
-}
-#infoContent h2 {
-  margin-top: 0;
-  color: #F5F5F5;
+.menu-section h3{
+    margin-top:0;
+    border-bottom:1px solid #555;
+    padding-bottom:8px;
 }
