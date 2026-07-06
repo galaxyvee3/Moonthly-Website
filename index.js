@@ -11,6 +11,8 @@ let selectedDate = null;
 
 // Elements
 const authContainer = document.getElementById("auth");
+const infoBtn = document.getElementById("infoBtn");
+const infoModal = document.getElementById("infoModal");
 const closeInfo = document.getElementById("closeInfo");
 const calendar = document.getElementById("calendar");
 const modal = document.getElementById("noteModal");
