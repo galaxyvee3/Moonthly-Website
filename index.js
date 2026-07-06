@@ -11,9 +11,6 @@ let selectedDate = null;
 
 // Elements
 const authContainer = document.getElementById("auth");
-const infoBtn = document.getElementById("infoBtn");
-const infoModal = document.getElementById("infoModal");
-const closeInfo = document.getElementById("closeInfo");
 const calendar = document.getElementById("calendar");
 const modal = document.getElementById("noteModal");
 const modalDate = document.getElementById("modalDate");
@@ -38,13 +35,6 @@ monthNames.forEach((m, i) => {
   opt.textContent = m;
   monthSelect.appendChild(opt);
 });
-
-// Information window
-infoBtn.addEventListener("click", () => { infoModal.style.display = "flex"; });
-closeInfo.addEventListener("click", () => { infoModal.style.display = "none"; });
-
-// Close when clicking outside the box
-infoModal.addEventListener("click", (e) => { if (e.target === infoModal) { infoModal.style.display = "none"; } });
 
 // Build calendar
 export function buildCalendar(year, month) {
