@@ -7,30 +7,16 @@
     <link rel="icon" type="image/x-icon" href="assets/Icon.png">
   </head>
   <body>
-    <button id="menuBtn">Menu</button>
-    <div id="sideMenu">
-
-      <div class="menu-section"> <!-- Login section -->
-        <h3>Login</h3>
-        <div id="auth">
-          <input id="email" type="email" placeholder="Email">
-          <input id="password" type="password" placeholder="Password">
-          <button id="loginBtn">Login</button>
-          <button id="signupBtn">Sign Up</button>
-        </div>
-        <div> <!-- Logout info -->
-          <p id="authStatus"></p>
-          <button id="logoutBtn" hidden>Logout</button>
-        </div>
-      </div>
-
-      <div class="menu-section"> <!-- Customization section -->
-        <h3>Customization</h3>
-        <button>Light Theme</button>
-        <button>Dark Theme</button>
-      </div>
+    <div id="auth"> <!-- Login menu -->
+      <input id="email" type="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <button id="loginBtn">Login</button>
+      <button id="signupBtn">Sign Up</button>
     </div>
-    
+    <div> <!-- Logout info -->
+      <p id="authStatus"></p>
+      <button id="logoutBtn" hidden>Logout</button>
+    </div>
     <div id="calendarSection"> <!-- Calendar section -->
       <div id="calendarHeader"> <!-- Month + navigation -->
         <button id="prevMonth">←</button>
