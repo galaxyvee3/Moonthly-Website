@@ -102,8 +102,6 @@ document.getElementById("deleteNote").addEventListener("click", async () => {
   modal.style.display = "none";
 });
 
-document.getElementById("closeModal").addEventListener("click", ()=>{ modal.style.display = "none"; });
-
 // Calendar navigation
 prevMonthBtn.addEventListener("click", () => {
   currentMonth--; if(currentMonth<0){currentMonth=11; currentYear--;}
